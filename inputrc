@@ -1,0 +1,52 @@
+# http://www.gnu.org/software/bash/manual/html_node/Readline-Init-File-Syntax.html
+# bind -l to list functions
+
+#set editing-mode vi
+set completion-ignore-case On
+set bell-style none
+
+# first tab will show all options, instead of default second tab
+set show-all-if-ambiguous on
+
+# vi-mode doesn't have these
+C-l: clear-screen
+
+"\e[1;5C": forward-word
+"\e[1;5D": backward-word
+"\e[5C": forward-word
+"\e[5D": backward-word
+"\e\e[C": forward-word
+"\e\e[D": backward-word
+
+"\e[3~": delete-char
+# this is actually equivalent to "\C-?": delete-char
+
+"\e\e[3~": delete-word
+
+Control-Del: kill-word
+Meta-Del: kill-word
+
+Control-Rubout: backward-kill-word
+Meta-Rubout: backward-kill-word
+
+#"\eOC": forward-word
+#"\eOD": backward-word
+#"^[OC": forward-word
+#"^[OD": backward-word
+
+"\ep": history-search-backward
+"\en": history-search-forward
+
+
+# VT
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
+# kvt
+"\e[H": beginning-of-line
+"\e[F": end-of-line
+
+# rxvt and konsole (i.e. the KDE-app...)
+"\e[7~": beginning-of-line
+"\e[8~": end-of-line
+

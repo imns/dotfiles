@@ -1,0 +1,63 @@
+#[diff]
+#	external = git_diff_wrapper
+
+[pager]
+	diff =
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	ui = auto
+
+[user]
+	name = Nate Smith
+	email = something@something.com
+
+[core]
+	eol = lf
+
+[merge]
+	tool = opendiff
+
+[alias]
+    # lot of good ideas http://git.wiki.kernel.org/index.php/Aliases
+    # briefer status output
+    st = status -sb
+    stn = status -sb -uno
+    # run 'git rm' on files already deleted outside of git
+    rmdead = !git ls-files --deleted | xargs git rm
+    # list new commits after a fetch
+    lc = log ORIG_HEAD.. --stat --no-merges
+    # useful at times that i have a more exotic default diff (vimdiff)
+    rdiff = diff --no-ext-diff
+    # highlight differing words instead of lines
+    wdiff = diff --color-words
+    # nicer log output
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    # http://pyrtsa.posterous.com/aligning-your-git-logs
+    l50 = "!git log --abbrev-commit --date=short --pretty=format:'%x00%h%x00%cd%x00%s%x00%an%x00%d' | gawk -F '\\0' '{ printf \"%s\\033[31m%s\\033[0m \\033[32m%s\\033[0m %-50s \\033[30;1m%s\\033[0m\\033[33m%s\\n\", $1, $2, $3, gensub(/(.{49}).{2,}/, \"\\\\1…\",\"g\",$4), $5, $6 }' | less -R"
+	ll80 = "!git log --abbrev-commit --date=short --pretty=format:'%x00%h%x00%cd%x00%s%x00%an%x00%d' | gawk -F '\\0' '{ printf \"%s\\033[31m%s\\033[0m \\033[32m%s\\033[0m %-80s \\033[30;1m%s\\033[0m\\033[33m%s\\n\", $1, $2, $3, gensub(/(.{79}).{2,}/, \"\\\\1…\",\"g\",$4), $5, $6 }' | less -R"
+    lg50 = "!git log --graph --color=always --abbrev-commit --date=relative --pretty=format:'%x00%h%x00%s%x00%cd%x00%an%x00%d' | gawk -F '\\0' '{ printf \"%s\\033[31m%s\\033[0m %-50s \\033[32m%14s\\033[0m \\033[30;1m%s\\033[0m\\033[33m%s\\n\", $1, $2, gensub(/(.{49}).{2,}/, \"\\\\1…\",\"g\",$3), $4, $5, $6 }' | less -R"
+    lg80 = "!git log --graph --color=always --abbrev-commit --date=relative --pretty=format:'%x00%h%x00%s%x00%cd%x00%an%x00%d' | gawk -F '\\0' '{ printf \"%s\\033[31m%s\\033[0m %-80s \\033[32m%14s\\033[0m \\033[30;1m%s\\033[0m\\033[33m%s\\n\", $1, $2, gensub(/(.{79}).{2,}/, \"\\\\1…\",\"g\",$3), $4, $5, $6 }' | less -R"
+	loj = log  --abbrev-commit --decorate --graph --date=iso --pretty=format:'%C(yellow)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %ad %C(bold blue)<%an>%Creset'
+	branchdiff = diff --name-status
+	files = !git log --pretty=format: --name-only --diff-filter=A | sort -
+	stageddiff = diff --cached
+
+    type = cat-file -t
+    dump = cat-file -p
+
+[push]
+	default = matching
+
+[text]
+	eol = lf
+
+[status]
+#	showUntrackedFiles = true
+	showDirtyState = true
+	showStashState = true
+
+[advice]
+	statusHints = true
