@@ -36,8 +36,9 @@ if
 
 #git push
 gp(){
+  BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
   if [ $1 ]; then
-    git add . && git commit -am $1 && git push origin master
+    git add . && git commit -am $1 && git push origin $BRANCH
   else
     echo "Please enter a commit message"
   fi
