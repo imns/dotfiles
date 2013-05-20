@@ -1,8 +1,29 @@
 #helpers
 alias bp='sublime ~/.bash_profile'
 alias sbp='source ~/.bash_profile'
-#alias push='git add . && git commit && git push origin master'
 alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
+
+#dev1vm
+if [ $HOSTNAME = dev1vm.multi-ad.com ]; then
+  alias co='cd /raid/0/www/docs/projects/marketplace/document_root'
+  alias ant='cd /raid/0/www/docs/projects/marketplace/document_root/ant'
+  alias kwikee='cd /raid/0/www/docs/projects/kwikee_systems/document_root'
+  alias docs='cd /raid/0/www/docs'
+  alias projects='cd /raid/0/www/projects'
+  alias clients='cd /raid/0/www/docs/clients'
+  alias prods='cd /raid/0/www/docs/prods'
+if
+
+#work
+if [ $HOSTNAME = Nate-Smiths-iMac.local ]; then
+  alias il='ssh illini@illini.webfactional.com'
+  alias illini='cd ~/Sites/nodejs/illini'
+  alias imns='ssh imns@imns.webfactional.com'
+  alias cabooodle='ssh cabooodle@cabooodle.webfactional.com'
+  alias cb='cd  ~/Sites/nodejs/cbnew'
+  alias cbserver='cd ~/Sites/nodejs/cbnew && grunt server'
+  alias cbopen='cd ~/Sites/nodejs/cbnew && open cbnew.sublime-project'
+if
 
 
 #git push
