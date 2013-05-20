@@ -1,3 +1,11 @@
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+
+PATH=$PATH:$HOME/bin
+
+export PATH
+
 #helpers
 alias bp='sublime ~/.bash_profile'
 alias sbp='source ~/.bash_profile'
