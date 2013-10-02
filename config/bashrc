@@ -1,46 +1,56 @@
-if [ -f ~/.bashrc ]; then
-  . ~/.bashrc
-fi
+ export PATH=~/bin:/usr/local/bin:/usr/local/mysql/bin:/Applications/Postgres.app/Contents/MacOS/bin:usr/local/deployd/bin:$PATH
 
-PATH=$PATH:$HOME/bin
+#for django and heroku
+export LOCAL_DEV=true
+export NODE_DEV_ENV=true
 
-export PATH
+#oracle
+export ORACLE_HOME=/usr/local/lib/instantclient
+export LD_LIBRARY_PATH=$ORACLE_HOME:$LD_LIBRARY_PATH
+export DYLD_LIBRARY_PATH=$ORACLE_HOME
+export VERSIONER_PYTHON_PREFER_64_BIT=yes
+export VERSIONER_PYTHON_PREFER_32_BIT=no
+
+# Coda
+# set path
+export CODA_PATH=/Applications/Coda.app
+
+# MacPorts Installer addition on 2011-01-19_at_08:33:41: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+#
 
 #helpers
 alias bp='sublime ~/.bash_profile'
 alias sbp='source ~/.bash_profile'
+#alias push='git add . && git commit && git push origin master'
 alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 
-#dev1vm
-if [ $HOSTNAME = dev1vm.multi-ad.com ]; then
-  alias co='cd /raid/0/www/docs/projects/marketplace/document_root'
-  alias ant='cd /raid/0/www/docs/projects/marketplace/document_root/ant'
-  alias kwikee='cd /raid/0/www/docs/projects/kwikee_systems/document_root'
-  alias docs='cd /raid/0/www/docs'
-  alias projects='cd /raid/0/www/projects'
-  alias clients='cd /raid/0/www/docs/clients'
-  alias prods='cd /raid/0/www/docs/prods'
-if
+#personal
+alias il='ssh illini@illini.webfactional.com'
+alias illini='cd ~/Sites/nodejs/illini'
+alias illiniserver='cd ~/Sites/nodejs/illini && NODE_DEV_ENV="true" nodemon -e js,css,html app.js'
+alias imns='ssh imns@imns.webfactional.com'
+alias cabooodle='ssh cabooodle@cabooodle.webfactional.com'
+#alias cb='cd /Users/natesmith/Sites/django/cabooodle/src/cabooodle && source ../../bin/activate'
+alias cb='cd ~/Sites/nodejs/cbnew'
+alias cbserver='cd ~/Sites/nodejs/cbnew && grunt server'
+alias cbopen='cd ~/Sites/nodejs/cbnew && open cbnew.sublime-project'
+alias recas='cd ~/Sites/vagrant/recas/django && open recas.sublime-project'
+alias cocoa='cd ~/Sites/cocoa'
 
 #work
-if [ $HOSTNAME = Nate-Smiths-iMac.local ]; then
-  alias il='ssh illini@illini.webfactional.com'
-  alias illini='cd ~/Sites/nodejs/illini'
-  alias imns='ssh imns@imns.webfactional.com'
-  alias cabooodle='ssh cabooodle@cabooodle.webfactional.com'
-  alias cb='cd  ~/Sites/nodejs/cbnew'
-  alias cbserver='cd ~/Sites/nodejs/cbnew && grunt server'
-  alias cbopen='cd ~/Sites/nodejs/cbnew && open cbnew.sublime-project'
-if
-
+alias login='ssh nsmith@dev1vm.multi-ad.com'
+alias dev3vm='ssh nsmith@dev3vm.multi-ad.com'
+alias web1vm='ssh nsmith@web1vm.multi-ad.com'
 
 #git push
 gp(){
-  local branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+  BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
   if [ $1 ]; then
-    git add . && git commit -am $1 && git push origin $branch
+git add . && git commit -am $1 && git push origin $BRANCH
   else
-    echo "Please enter a commit message"
+echo "Please enter a commit message"
   fi
 }
 
@@ -180,3 +190,7 @@ for f in $(command ls ~/.node-completion); do
   test -f "$f" && . "$f"
 done
 # }}}
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
