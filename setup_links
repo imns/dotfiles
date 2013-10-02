@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# 2011-08-20
+# Set up symlinks to config files in my dotfiles repository.
+# expects to be run from the root of the dotfiles repository
+
+[ ! -d ~/dotfiles ] && exit 'no dotfiles directory';
+
+dryrun=0
+if [ "$1" == '--dry-run' ]; then
+	dryrun=1
+fi
+
+if [ $dryrun == 1 ]; then
+    echo 'NOTE: performing a DRY RUN.  no actual changes will be made.'
+fi
+
+declare -a removeable
+
+fileprefix='.'
+
+#removeable =  linkAllInDir('config/', op.expanduser('~/'), dryrun, fileprefix='.')
+#def linkAllInDir(srcdir, destdir, dryrun=False, fileprefix=''):
+
+for f in ~/dotfiles/config/*
+do
+	file=$(basename $f)
+	srcrel="dotfiles/config/$file"
+	eval src="~/$srcrel"
+	eval dest="~/$fileprefix$file"
+
+#echo "$file"
+
+	realsrc=$(readlink -f $src)
+	realdest=$(readlink -f $dest)
+
+#	echo "src      $src"
+#	echo "dest     $dest"
+#	echo "realsrc  $realsrc"
+#	echo "realdest $realdest"
+
+	if [ -h "$dest" ] && [ "$realsrc" == "$realdest" ]; then
+#		echo "ALREADY LINKED: $dest is already linked to $src"
+		:
+	elif [ -e $dest ]; then
+		if [ -f $dest ]; then
+#			echo "diff --brief $src $dest"
+			diff=`diff --brief $src $dest`
+			if [[ $diff =~ 'differs' ]]; then
+				echo "EXISTS BUT HAS SAME CONTENTS AS DOTFILES: $dest"
+				removeable=("${removeable[@]}" $dest)
+			else
+				echo "EXISTS AND DIFFERS: $dest  (not going to symlink it!)"
+			fi
+		elif [ -d $dest ]; then
+			echo "EXISTS AND IS A DIRECTORY: $dest (doing nothing, check it yourself)."
+		fi
+    else
+		if [ $dryrun -eq 0 ]; then
+		    echo "CREATING LINK: ln -s $src $dest"
+		    ln -s $src $dest
+		else
+		    echo "DRY RUN: would do ln -s $src $dest"
+		fi
+	fi
+done
+
+if [[ ${#removeable[@]} > 0 ]]; then
+	echo ""
+	echo "The following files already existed but had the same contents as the repo."
+	echo "You can safely delete them and rerun this script to establish links."
+	for f in ${removeable[@]}; do
+	    echo "  ${f}"
+	done
+fi
+
