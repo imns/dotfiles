@@ -26,32 +26,25 @@ alias sbp='source ~/.bash_profile'
 #alias push='git add . && git commit && git push origin master'
 alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 
-#personal
-alias il='ssh illini@illini.webfactional.com'
-alias illini='cd ~/Sites/nodejs/illini'
-alias illiniserver='cd ~/Sites/nodejs/illini && NODE_DEV_ENV="true" nodemon -e js,css,html app.js'
-alias imns='ssh imns@imns.webfactional.com'
-alias cabooodle='ssh cabooodle@cabooodle.webfactional.com'
-#alias cb='cd /Users/natesmith/Sites/django/cabooodle/src/cabooodle && source ../../bin/activate'
-alias cb='cd ~/Sites/nodejs/cbnew'
-alias cbserver='cd ~/Sites/nodejs/cbnew && grunt server'
-alias cbopen='cd ~/Sites/nodejs/cbnew && open cbnew.sublime-project'
-alias recas='cd ~/Sites/vagrant/recas/django && open recas.sublime-project'
-alias cocoa='cd ~/Sites/cocoa'
+#more aliases
+if [ -f ~/.bash_aliases ]; then
+  . ~/.bash_aliases
+fi
 
-#work
-alias login='ssh nsmith@dev1vm.multi-ad.com'
-alias dev3vm='ssh nsmith@dev3vm.multi-ad.com'
-alias web1vm='ssh nsmith@web1vm.multi-ad.com'
 
 #git push
-gp(){
+gpush(){
   BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
   if [ $1 ]; then
 git add . && git commit -am $1 && git push origin $BRANCH
   else
 echo "Please enter a commit message"
   fi
+}
+
+gpull(){
+ BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+ git pull origin $BRANCH
 }
 
 #go up n # of dirs
