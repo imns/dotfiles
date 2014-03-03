@@ -35,13 +35,15 @@ fi
 #git push
 gpush(){
   BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
-  if [ $1 ]; then
-git add . && git commit -am $1 && git push origin $BRANCH
+  MSG=$1
+  if [ "$MSG" ]; then
+	   git add . && git commit -am "$MSG" && git push origin $BRANCH
   else
-echo "Please enter a commit message"
+	   echo "Please enter a commit message"
   fi
 }
 
+#git pull origin {{branch}}
 gpull(){
  BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
  git pull origin $BRANCH
