@@ -62,6 +62,10 @@ up(){
   cd $d
 }
 
+#search for strings on uncommented Python lines
+#ex: pygrep "search_string_here" optional_list_of_files_and_directories
+function pygrep () { grep -r --exclude="*.pyc" --exclude="*.swp" ^[^#]*$1.* ${@:2}; }
+
 #extracts all kinds of zip type files
 extract () {
    if [ -f $1 ] ; then
