@@ -1,4 +1,4 @@
- export PATH=~/bin:/usr/local/bin:/usr/local/mysql/bin:/Applications/Postgres.app/Contents/MacOS/bin:usr/local/deployd/bin:$PATH
+ export PATH=~/bin:/usr/local/bin:/usr/local/mysql/bin:usr/local/deployd/bin:/opt/local/bin:/opt/local/sbin:$PATH
 
 #for django and heroku
 export LOCAL_DEV=true
@@ -11,19 +11,7 @@ export DYLD_LIBRARY_PATH=$ORACLE_HOME
 export VERSIONER_PYTHON_PREFER_64_BIT=yes
 export VERSIONER_PYTHON_PREFER_32_BIT=no
 
-# Coda
-# set path
-export CODA_PATH=/Applications/Coda.app
-
-# MacPorts Installer addition on 2011-01-19_at_08:33:41: adding an appropriate PATH variable for use with MacPorts.
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-# Finished adapting your PATH environment variable for use with MacPorts.
-#
-
-#helpers
-alias bp='sublime ~/.bash_profile'
-alias sbp='source ~/.bash_profile'
-#alias push='git add . && git commit && git push origin master'
+#aliases
 alias folders='find . -maxdepth 1 -type d -print0 | xargs -0 du -sk | sort -rn'
 
 #more aliases
@@ -48,6 +36,24 @@ gpull(){
  BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
  git pull origin $BRANCH
 }
+
+#fabric autocomplete
+_fab(){
+    local cur
+    COMPREPLY=()
+    # Variable to hold the current word
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # Build a list of the available tasks using the command 'fab -l'
+    local tags=$(fab -l 2>/dev/null | grep "^ " | awk '{print $1;}')
+
+    # Generate possible matches and store them in the
+    # array variable COMPREPLY
+    COMPREPLY=($(compgen -W "${tags}" $cur))
+}
+
+# Assign the auto-completion function _fab for our command fab.
+complete -F _fab fab
 
 #go up n # of dirs
 up(){
@@ -136,60 +142,3 @@ prompt
 
 #ssh stuff from github
 SSH_ENV="$HOME/.ssh/environment"
-
-# start the ssh-agent
-function start_agent {
-    echo "Initializing new SSH agent..."
-    # spawn ssh-agent
-    ssh-agent | sed 's/^echo/#echo/' > "$SSH_ENV"
-    echo succeeded
-    chmod 600 "$SSH_ENV"
-    . "$SSH_ENV" > /dev/null
-    ssh-add
-}
-
-# test for identities
-function test_identities {
-    # test whether standard identities have been added to the agent already
-    ssh-add -l | grep "The agent has no identities" > /dev/null
-    if [ $? -eq 0 ]; then
-        ssh-add
-        # $SSH_AUTH_SOCK broken so we start a new proper agent
-        if [ $? -eq 2 ];then
-            start_agent
-        fi
-    fi
-}
-
-# check for running ssh-agent with proper $SSH_AGENT_PID
-if [ -n "$SSH_AGENT_PID" ]; then
-    ps -ef | grep "$SSH_AGENT_PID" | grep ssh-agent > /dev/null
-    if [ $? -eq 0 ]; then
-    test_identities
-    fi
-# if $SSH_AGENT_PID is not properly set, we might be able to load one from
-# $SSH_ENV
-else
-    if [ -f "$SSH_ENV" ]; then
-    . "$SSH_ENV" > /dev/null
-    fi
-    ps -ef | grep "$SSH_AGENT_PID" | grep -v grep | grep ssh-agent > /dev/null
-    if [ $? -eq 0 ]; then
-        test_identities
-    else
-        start_agent
-    fi
-fi
-
-# {{{
-# Node Completion - Auto-generated, do not touch.
-shopt -s progcomp
-for f in $(command ls ~/.node-completion); do
-  f="$HOME/.node-completion/$f"
-  test -f "$f" && . "$f"
-done
-# }}}
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
