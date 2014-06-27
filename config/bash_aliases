@@ -1,0 +1,3 @@
+# mac helpers
+alias bp='sublime ~/.bash_profile'
+alias sbp='source ~/.bash_profile'
