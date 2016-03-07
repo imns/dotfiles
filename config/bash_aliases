@@ -1,3 +1,6 @@
+#shortcuts
+alias ll='ls -la --color=auto'
+
 # mac helpers
 alias bp='sublime ~/.bash_profile'
 alias sbp='source ~/.bash_profile'
